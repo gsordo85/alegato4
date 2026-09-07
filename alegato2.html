@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1e7a6e">
+<title>ALEGATO · Juristas por los Animales</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root{--g:#1e7a6e;--gl:#28a394;--gd:#145a51;--gdd:#0d3d37;--m:#e8f5f1;--w:#fff;--glass:rgba(255,255,255,0.72);--ink:#0f2f28;--txt:#1a3d35;--mut:#5a8a7f;--hi:#e74c3c;--med:#f39c12;--lo:#27ae60;--sh:0 8px 24px rgba(13,61,55,0.12);--r:18px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:linear-gradient(160deg,#e8f5f1,#c8e8e0,#e0f2ee);min-height:100vh;color:var(--ink);line-height:1.6;overflow-x:hidden}
+.app{position:relative;max-width:480px;margin:0 auto;min-height:100vh;background:rgba(240,250,247,0.6);box-shadow:var(--sh);overflow-x:hidden}
+.screen{display:none;padding:0 16px 100px;animation:fadeUp .4s ease}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-18px) rotate(3deg)}}
+@keyframes paw{0%,100%{transform:translateY(0) rotate(-12deg);opacity:.06}50%{transform:translateY(-30px) rotate(8deg);opacity:.12}}
+@keyframes fly{0%{left:-20%;opacity:0}10%{opacity:.8}90%{opacity:.8}100%{left:108%;opacity:0}}
+.bg-animals{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-animals .a{position:absolute;font-size:2rem;opacity:.06;animation:float 8s ease-in-out infinite}
+.bg-animals .a:nth-child(1){left:5%;top:12%;animation-delay:0s;font-size:2.5rem}
+.bg-animals .a:nth-child(2){right:8%;top:25%;animation-delay:-2s;font-size:3rem}
+.bg-animals .a:nth-child(3){left:15%;bottom:20%;animation-delay:-4s;font-size:2rem}
+.bg-animals .a:nth-child(4){right:20%;top:60%;animation-delay:-1s;font-size:1.8rem}
+.bg-animals .a:nth-child(5){left:50%;top:8%;animation-delay:-3s;font-size:2.2rem}
+.paw-trail{position:absolute;font-size:1.2rem;opacity:.06;animation:paw 6s ease-in-out infinite}
+.hero{text-align:center;padding:60px 20px 40px}
+.hero-logo{width:120px;height:120px;margin:0 auto 20px;background:var(--glass);border-radius:40px;display:flex;align-items:center;justify-content:center;box-shadow:var(--sh);backdrop-filter:blur(10px)}
+.hero-logo img{width:100px;height:100px;object-fit:contain}
+.hero h1{font-size:2rem;font-weight:800;color:var(--g);margin-bottom:8px;letter-spacing:-0.5px}
+.hero p{color:var(--mut);font-size:0.95rem;margin-bottom:30px}
+.card{background:var(--glass);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--sh);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.5)}
+.card h3{font-size:1.1rem;font-weight:700;color:var(--g);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:0.85rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:14px 16px;border:2px solid #e0ede8;border-radius:14px;font-size:0.95rem;font-family:inherit;background:rgba(255,255,255,0.8);color:var(--ink);transition:all .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 4px rgba(30,122,110,0.1)}
+.btn{width:100%;padding:16px;border:none;border-radius:14px;font-size:1rem;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,var(--g),var(--gl));color:#fff;box-shadow:0 4px 16px rgba(30,122,110,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(30,122,110,0.4)}
+.btn-secondary{background:transparent;color:var(--g);border:2px solid var(--g)}
+.btn-danger{background:var(--hi);color:#fff}
+.btn-sm{padding:10px 16px;font-size:0.85rem;width:auto}
+.text-center{text-align:center}
+.link{color:var(--g);font-weight:600;cursor:pointer;text-decoration:none;font-size:0.9rem}
+.link:hover{text-decoration:underline}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:700}
+.badge-hi{background:rgba(231,76,60,0.15);color:var(--hi)}
+.badge-med{background:rgba(243,156,18,0.15);color:var(--med)}
+.badge-lo{background:rgba(39,174,96,0.15);color:var(--lo)}
+.badge-g{background:rgba(30,122,110,0.15);color:var(--g)}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-top:1px solid rgba(30,122,110,0.1);display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 12px;color:var(--mut);font-size:0.7rem;font-weight:600;cursor:pointer;transition:color .2s;border:none;background:none}
+.nav-item.active{color:var(--g)}
+.nav-item .icon{font-size:1.4rem}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.stat-card{background:var(--glass);border-radius:16px;padding:16px;text-align:center;box-shadow:var(--sh)}
+.stat-card .num{font-size:1.8rem;font-weight:800;color:var(--g)}
+.stat-card .label{font-size:0.75rem;color:var(--mut);font-weight:600;margin-top:4px}
+.table-wrap{overflow-x:auto;border-radius:14px;background:var(--glass);box-shadow:var(--sh)}
+table{width:100%;border-collapse:collapse;font-size:0.85rem}
+th{background:var(--g);color:#fff;padding:12px 10px;text-align:left;font-weight:600;white-space:nowrap}
+td{padding:10px;border-bottom:1px solid #e0ede8;vertical-align:top}
+tr:hover{background:rgba(30,122,110,0.04)}
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--g);opacity:.2}
+.timeline-item{position:relative;margin-bottom:16px}
+.timeline-item::before{content:'';position:absolute;left:-24px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--g);border:2px solid #fff;box-shadow:0 0 0 2px var(--g)}
+.timeline-item .date{font-size:0.75rem;color:var(--mut)}
+.timeline-item .text{font-size:0.9rem;margin-top:4px}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--g);color:#fff;padding:14px 24px;border-radius:14px;font-weight:600;font-size:0.9rem;z-index:999;animation:fadeUp .3s ease;box-shadow:var(--sh)}
+.splash{position:fixed;inset:0;background:linear-gradient(135deg,var(--g),var(--gd));display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .5s}
+.splash.hide{opacity:0;pointer-events:none}
+.splash h1{color:#fff;font-size:2rem;font-weight:800;margin-top:20px}
+.splash p{color:rgba(255,255,255,0.7);margin-top:8px}
+.splash .logo{font-size:4rem;animation:float 2s ease-in-out infinite}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:0.8rem;font-weight:600;background:rgba(30,122,110,0.1);color:var(--g);margin:4px}
+.empty-state{text-align:center;padding:40px 20px;color:var(--mut)}
+.empty-state .icon{font-size:3rem;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="logo">🐾</div>
+  <h1>ALEGATO</h1>
+  <p>Juristas por los Animales · Colombia</p>
+</div>
+
+<!-- BG ANIMALS -->
+<div class="bg-animals">
+  <div class="a">🐱</div><div class="a">🐶</div><div class="a">🐦</div><div class="a">🐾</div><div class="a">🦅</div>
+</div>
+
+<div class="app">
+
+  <!-- ========== HOME / LANDING ========== -->
+  <div class="screen active" id="scr-home">
+    <div class="hero">
+      <div class="hero-logo">
+        <img src="logo.png" alt="ALEGATO" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="font-size:3rem;display:none">⚖️🐱</div>
+      </div>
+      <h1>ALEGATO</h1>
+      <p>Juristas por los Animales · Protegiendo a quienes no tienen voz</p>
+    </div>
+
+    <div class="card">
+      <h3>🐾 Consultar estado de caso</h3>
+      <div class="form-group">
+        <label>Número de radicado</label>
+        <input type="text" id="pubRadicado" placeholder="Ej: ALG-250101-A3F2">
+      </div>
+      <button class="btn btn-secondary" onclick="consultarPublico()">🔍 Consultar</button>
+      <div id="pubResult" style="margin-top:16px"></div>
+    </div>
+
+    <button class="btn btn-primary" style="margin-bottom:12px" onclick="show('scr-login')">👤 Iniciar Sesión</button>
+    <button class="btn btn-secondary" style="margin-bottom:24px" onclick="show('scr-register')">📝 Registrar Denuncia</button>
+
+    <div class="card text-center">
+      <p style="font-size:0.85rem;color:var(--mut)">👥 Usuarios demo<br>
+        <strong>gestor@alegato.org</strong> / demo123<br>
+        <strong>admin@alegato.org</strong> / demo123
+      </p>
+    </div>
+  </div>
+
+  <!-- ========== LOGIN ========== -->
+  <div class="screen" id="scr-login">
+    <div class="hero" style="padding-bottom:20px">
+      <div class="hero-logo"><img src="logo.png" alt="ALEGATO" onerror="this.style.display='none'" style="width:80px;height:80px"></div>
+      <h1>Iniciar Sesión</h1>
+    </div>
+    <div class="card">
+      <div class="form-group">
+        <label>📧 Correo electrónico</label>
+        <input type="email" id="loginEmail" placeholder="tu@correo.com">
+      </div>
+      <div class="form-group">
+        <label>🔑 Contraseña</label>
+        <input type="password" id="loginPass" placeholder="••••••">
+      </div>
+      <button class="btn btn-primary" onclick="doLogin()">Ingresar</button>
+      <div style="text-align:center;margin-top:16px">
+        <a class="link" onclick="show('scr-recover')">¿Olvidaste tu contraseña?</a>
+      </div>
+      <div style="text-align:center;margin-top:12px">
+        <a class="link" onclick="show('scr-register')">Crear cuenta de denunciante</a>
+      </div>
+      <div style="text-align:center;margin-top:12px">
+        <a class="link" onclick="show('scr-home')">← Volver al inicio</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== RECOVER PASSWORD ========== -->
+  <div class="screen" id="scr-recover">
+    <div class="hero" style="padding-bottom:20px">
+      <h1>🔑 Recuperar Contraseña</h1>
+      <p>Te enviaremos un código a tu correo</p>
+    </div>
+
+    <!-- Step 1: Enter email -->
+    <div id="recoverStep1" class="card">
+      <div class="form-group">
+        <label>📧 Correo electrónico</label>
+        <input type="email" id="recoverEmail" placeholder="tu@correo.com">
+      </div>
+      <button class="btn btn-primary" onclick="enviarCodigoRecuperacion()">📨 Enviar código</button>
+      <div style="text-align:center;margin-top:12px">
+        <a class="link" onclick="show('scr-login')">← Volver al login</a>
+      </div>
+    </div>
+
+    <!-- Step 2: Enter code + new password -->
+    <div id="recoverStep2" class="card" style="display:none">
+      <h3>✅ Ingresa el código y nueva contraseña</h3>
+      <div class="form-group">
+        <label>🔢 Código de verificación</label>
+        <input type="text" id="recoverCode" placeholder="Ej: A3F2K9" maxlength="6" style="text-transform:uppercase;text-align:center;font-size:1.2rem;letter-spacing:4px">
+      </div>
+      <div class="form-group">
+        <label>🔑 Nueva contraseña</label>
+        <input type="password" id="recoverNewPass" placeholder="Mínimo 6 caracteres">
+      </div>
+      <div class="form-group">
+        <label>🔑 Confirmar contraseña</label>
+        <input type="password" id="recoverConfirm" placeholder="Repite la contraseña">
+      </div>
+      <button class="btn btn-primary" onclick="cambiarContrasena()">🔄 Cambiar contraseña</button>
+      <div style="text-align:center;margin-top:12px">
+        <a class="link" onclick="show('scr-login')">← Volver al login</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== REGISTER (DENUNCIANTE) ========== -->
+  <div class="screen" id="scr-register">
+    <div class="hero" style="padding-bottom:10px">
+      <h1>📝 Registro de Denunciante</h1>
+    </div>
+    <div class="card">
+      <div class="form-group"><label>Nombre completo *</label><input type="text" id="regNombre" placeholder="Juan Pérez López"></div>
+      <div class="form-group"><label>Tipo de documento *</label>
+        <select id="regTipoDoc"><option value="CC">Cédula de Ciudadanía</option><option value="CE">Cédula Extranjería</option><option value="TI">Tarjeta Identidad</option></select>
+      </div>
+      <div class="form-group"><label>Número de documento *</label><input type="text" id="regDoc" placeholder="1234567890"></div>
+      <div class="form-group"><label>Celular *</label><input type="tel" id="regCelular" placeholder="3001234567"></div>
+      <div class="form-group"><label>Correo electrónico</label><input type="email" id="regEmail" placeholder="correo@ejemplo.com"></div>
+      <div class="form-group"><label>Departamento *</label>
+        <select id="regDepto" onchange="cargarMunicipios('regDepto','regCiudad')"><option value="">Seleccionar...</option></select>
+      </div>
+      <div class="form-group"><label>Ciudad / Municipio *</label>
+        <select id="regCiudad"><option value="">Seleccionar depto primero...</option></select>
+      </div>
+      <div class="form-group"><label>Contraseña *</label><input type="password" id="regPass" placeholder="Mínimo 6 caracteres"></div>
+      <button class="btn btn-primary" onclick="registrarDenunciante()">✅ Registrarme</button>
+      <div style="text-align:center;margin-top:12px">
+        <a class="link" onclick="show('scr-login')">¿Ya tienes cuenta? Iniciar sesión</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== DENUNCIANTE DASHBOARD ========== -->
+  <div class="screen" id="scr-denunciante">
+    <div class="hero" style="padding-bottom:10px">
+      <h1>🐾 Mi Panel</h1>
+      <p id="denName">Denunciante</p>
+    </div>
+    <button class="btn btn-primary" style="margin-bottom:16px" onclick="show('scr-nueva-denuncia')">📝 Nueva Denuncia</button>
+    <h3 style="margin-bottom:12px;color:var(--g)">📋 Mis Denuncias</h3>
+    <div id="misDenuncias"></div>
+  </div>
+
+  <!-- ========== NUEVA DENUNCIA ========== -->
+  <div class="screen" id="scr-nueva-denuncia">
+    <h3 style="margin:20px 0 16px;color:var(--g)">📝 Nueva Denuncia</h3>
+    <div class="card">
+      <div class="form-group"><label>Tipo de caso *</label>
+        <select id="denTipo"><option>Maltrato animal</option><option>Abandono</option><option>Negligencia</option><option>Fauna silvestre</option><option>Conflictos comunitarios</option><option>Otros</option></select>
+      </div>
+      <div class="form-group"><label>Relato de los hechos *</label><textarea id="denRelato" rows="4" placeholder="Describe quién, qué, cuándo, dónde y cómo..."></textarea></div>
+      <div class="form-group"><label>Fecha aproximada *</label><input type="date" id="denFecha"></div>
+      <div class="form-group"><label>Departamento *</label>
+        <select id="denDepto" onchange="cargarMunicipios('denDepto','denCiudad')"><option value="">Seleccionar...</option></select>
+      </div>
+      <div class="form-group"><label>Ciudad / Municipio *</label>
+        <select id="denCiudad"><option value="">Seleccionar depto primero...</option></select>
+      </div>
+      <div class="form-group"><label>Dirección exacta</label><input type="text" id="denDireccion" placeholder="Calle 10 #5-20"></div>
+      <div class="form-group"><label>Posibles responsables</label><input type="text" id="denResponsables" placeholder="Nombre o descripción"></div>
+      <div class="form-group"><label>¿Existen pruebas? *</label>
+        <select id="denPruebas"><option value="si">Sí</option><option value="no">No</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="registrarDenuncia()">🚀 Registrar Denuncia</button>
+    </div>
+    <div style="text-align:center;margin-top:8px"><a class="link" onclick="show('scr-denunciante')">← Volver</a></div>
+  </div>
+
+  <!-- ========== GESTOR DASHBOARD ========== -->
+  <div class="screen" id="scr-gestor">
+    <div class="hero" style="padding-bottom:10px">
+      <h1>⚖️ Panel Gestor</h1>
+      <p id="gestName">Gestor ALEGATO</p>
+    </div>
+    <div class="stat-grid" id="gestStats"></div>
+    <button class="btn btn-primary" style="margin-bottom:12px" onclick="showGestorTab('pendientes')">📥 Pendientes</button>
+    <button class="btn btn-secondary" style="margin-bottom:12px" onclick="showGestorTab('activos')">📂 Activos</button>
+    <div id="gestorContent"></div>
+  </div>
+
+  <!-- ========== VALIDAR CASO ========== -->
+  <div class="screen" id="scr-validar">
+    <h3 style="margin:20px 0 12px;color:var(--g)">⚖️ Validar Caso</h3>
+    <div id="validarDetalles"></div>
+    <div class="card">
+      <div class="form-group"><label>Estado de validación *</label>
+        <select id="valEstado"><option>Validado - Completo</option><option>Requiere información</option><option>No competente</option></select>
+      </div>
+      <div class="form-group"><label>Observaciones internas</label><textarea id="valObs" rows="3" placeholder="Notas internas..."></textarea></div>
+      <button class="btn btn-primary" onclick="guardarValidacion()">💾 Guardar Validación</button>
+    </div>
+    <div style="text-align:center;margin-top:8px"><a class="link" onclick="show('scr-gestor')">← Volver</a></div>
+  </div>
+
+  <!-- ========== CLASIFICAR CASO ========== -->
+  <div class="screen" id="scr-clasificar">
+    <h3 style="margin:20px 0 12px;color:var(--g)">🏷️ Clasificar Caso</h3>
+    <div id="clasificarDetalles"></div>
+    <div class="card">
+      <div class="form-group"><label>Prioridad *</label>
+        <select id="clasPrioridad"><option value="Alta">🔴 Alta</option><option value="Media">🟠 Media</option><option value="Baja">🟢 Baja</option></select>
+      </div>
+      <div class="form-group"><label>Autoridad competente</label>
+        <select id="clasAutoridad"><option>Policía Nacional</option><option>Fiscalía</option><option>Alcaldía</option><option>Corpó ambiental</option><option>Otra</option></select>
+      </div>
+      <div class="form-group"><label>Observaciones</label><textarea id="clasObs" rows="3"></textarea></div>
+      <button class="btn btn-primary" onclick="guardarClasificacion()">💾 Guardar Clasificación</button>
+    </div>
+    <div style="text-align:center;margin-top:8px"><a class="link" onclick="show('scr-gestor')">← Volver</a></div>
+  </div>
+
+  <!-- ========== SEGUIMIENTO CASO ========== -->
+  <div class="screen" id="scr-seguimiento">
+    <h3 style="margin:20px 0 12px;color:var(--g)">📂 Expediente del Caso</h3>
+    <div id="segDetalles"></div>
+    <div class="card">
+      <h3>📝 Nueva Actuación</h3>
+      <div class="form-group"><label>Tipo de actuación *</label>
+        <select id="actTipo"><option>Orientación jurídica</option><option>Denuncia formal</option><option>Acompañamiento</option><option>Seguimiento</option><option>Archivo</option></select>
+      </div>
+      <div class="form-group"><label>Descripción *</label><textarea id="actDesc" rows="3" placeholder="Describe la actuación..."></textarea></div>
+      <div class="form-group"><label>Nuevo estado (opcional)</label>
+        <select id="actEstado"><option value="">Sin cambio</option><option>En gestión jurídica</option><option>Remitido a autoridad</option><option>En seguimiento</option><option>Cerrado</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="registrarActuacion()">💾 Registrar Actuación</button>
+    </div>
+    <div id="actHistorial"></div>
+    <div style="text-align:center;margin-top:8px"><a class="link" onclick="show('scr-gestor')">← Volver</a></div>
+  </div>
+
+  <!-- ========== ADMIN DASHBOARD ========== -->
+  <div class="screen" id="scr-admin">
+    <div class="hero" style="padding-bottom:10px">
+      <h1>🛠️ Panel Admin</h1>
+      <p id="admName">Administrador</p>
+    </div>
+    <div class="stat-grid" id="admStats"></div>
+    <button class="btn btn-primary" style="margin-bottom:12px" onclick="showAdminTab('reportes')">📊 Reportes</button>
+    <button class="btn btn-secondary" style="margin-bottom:12px" onclick="showAdminTab('usuarios')">👥 Usuarios</button>
+    <button class="btn btn-secondary" style="margin-bottom:12px" onclick="showAdminTab('todas')">📋 Todas las Denuncias</button>
+    <div id="adminContent"></div>
+  </div>
+
+  <!-- ========== BOTTOM NAV ========== -->
+  <div class="bottom-nav" id="bottomNav" style="display:none">
+    <button class="nav-item active" data-scr="home" onclick="navTo('home')"><span class="icon">🏠</span>Inicio</button>
+    <button class="nav-item" data-scr="mis-casos" onclick="navTo('mis-casos')"><span class="icon">📋</span>Casos</button>
+    <button class="nav-item" data-scr="nueva" onclick="navTo('nueva')"><span class="icon">➕</span>Nueva</button>
+    <button class="nav-item" data-scr="perfil" onclick="navTo('perfil')"><span class="icon">👤</span>Perfil</button>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// ALEGATO - Complete JavaScript Application
+// ═══════════════════════════════════════════════════════════
+
+// --- EmailJS Config (REEMPLAZA CON TUS CREDENCIALES) ---
+const EMAILJS_PUBLIC_KEY = 'TU_PUBLIC_KEY';
+const EMAILJS_SERVICE_ID = 'TU_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';
+
+// Initialize EmailJS
+if (typeof emailjs !== 'undefined') {
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+}
+
+// --- DATA KEYS ---
+const K_USERS = 'alegato_users';
+const K_CASES = 'alegato_cases';
+const K_SESSION = 'alegato_session';
+
+// --- DEPARTMENTS & MUNICIPALITIES ---
+const DEPTOS = {
+  'Amazonas':'Leticia,Puerto Nariño','Antioquia':'Medellín,Bello,Envigado,Itagüí,Rionegro',
+  'Arauca':'Arauca,Saravena,Tame','Atlántico':'Barranquilla,Soledad,Sabanalarga',
+  'Bolívar':'Cartagena,Turbaco,Magangué','Boyacá':'Tunja,Duitama,Sogamoso',
+  'Caldas':'Manizales,Chinchiná,La Dorada','Caquetá':'Florencia,San José del Guaviare',
+  'Casanare':'Yopal,Villanueva,Nunchía','Cauca':'Popayán,Guapi,Santander de Quilichao',
+  'Cesar':'Valledupar,Bosconia,Chiriguaná','Chocó':'Quibdó,Istmina,Tadó',
+  'Córdoba':'Montería,Caucasia,Sahagún','Cundinamarca':'Zipaquirá,Fusagasugá,Soacha,Chía,Cajicá',
+  'Guainía':'Inírida','Guaviare':'San José del Guaviare,Calamar,El Retorno',
+  'Huila':'Neiva,Pitalito,Garzón','La Guajira':'Riohacha,Manaure,El Molino',
+  'Magdalena':'Santa Marta,Ciénaga,Aracataca','Meta':'Villavicencio,Acacías,Granada',
+  'Nariño':'Pasto,Tumaco,Buesaco','Norte de Santander':'Cúcuta,Ocaña,Pamplona',
+  'Putumayo':'Mocoa,Puerto Asís,Sibundoy','Quindío':'Armenia,Calarcá,Montenegro',
+  'Risaralda':'Pereira,Santa Rosa de Cabal,La Virginia',
+  'San Andrés':'San Andrés,Providencia','Santander':'Bucaramanga,Floridablanca,Barrancabermeja',
+  'Sucre':'Sincelejo,Corozal,Sampués','Tolima':'Ibagué,Neiva (limitado),Espinal',
+  'Valle del Cauca':'Cali,Buenaventura,Palmira,Florida,Tuluá',
+  'Vaupés':'Mitú','Vichada':'Puerto Carreño','Bogotá D.C.':'Bogotá'
+};
+
+// --- UTILITIES ---
+function genId(){ return Math.random().toString(36).slice(2,10) }
+function genRadicado(){
+  const d=new Date(); const y=String(d.getFullYear()).slice(-2);
+  const m=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0');
+  const r=Math.random().toString(36).slice(2,6).toUpperCase();
+  return `ALG-${y}${m}${dd}-${r}`;
+}
+function getStore(k){ return JSON.parse(localStorage.getItem(k)||'[]') }
+function setStore(k,v){ localStorage.setItem(k, JSON.stringify(v)) }
+function getSession(){ return JSON.parse(localStorage.getItem(K_SESSION)||'null') }
+function toast(msg){
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  document.body.appendChild(t); setTimeout(()=>t.remove(),3000);
+}
+function escHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+// --- SCREENS ---
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// --- SPLASH ---
+setTimeout(()=>{ document.getElementById('splash').classList.add('hide'); },2000);
+
+// --- CARGAR USUARIOS DEMO ---
+function seedDemoUsers(){
+  if(localStorage.getItem(K_USERS)) return;
+  const demo=[
+    {id:'demo1',nombre:'Gestor ALEGATO',tipoDoc:'CC',doc:'1111111111',celular:'3001111111',
+     email:'gestor@alegato.org',password:'demo123',rol:'gestor',departamento:'Bogotá D.C.',ciudad:'Bogotá',creado:Date.now()},
+    {id:'demo2',nombre:'Administrador ALEGATO',tipoDoc:'CC',doc:'2222222222',celular:'3002222222',
+     email:'admin@alegato.org',password:'demo123',rol:'admin',departamento:'Bogotá D.C.',ciudad:'Bogotá',creado:Date.now()}
+  ];
+  setStore(K_USERS, demo);
+}
+seedDemoUsers();
+
+// --- SEED DEMO CASES ---
+function seedDemoCases(){
+  if(localStorage.getItem(K_CASES)) return;
+  const cases=[
+    {id:'c1',radicado:'ALG-250101-A3F2',userId:'demo1',tipo:'Maltrato animal',relato:'Perro atado con cadena corta enfinca sin alimento ni agua',fechaHechos:'2025-01-01',departamento:'Antioquia',ciudad:'Medellín',direccion:'Cra 45 #67-89',responsables:'Juan M.',pruebas:'si',creado:Date.now()-86400000*5,estado:'Denuncia recibida',prioridad:'',validacion:{},autoridad:'',actuaciones:[]},
+    {id:'c2',radicado:'ALG-250102-B7K9',userId:'demo1',tipo:'Fauna silvestre',relato:'Comercio ilegal de aves en plaza del mercado',fechaHechos:'2025-01-02',departamento:'Bogotá D.C.',ciudad:'Bogotá',direccion:'Plaza de Bolívar',responsables:'Desconocido',pruebas:'si',creado:Date.now()-86400000*3,estado:'En gestión jurídica',prioridad:'Alta',validacion:{estado:'Validado - Completo',obs:'Caso confirmado',fecha:Date.now()-86400000*2},autoridad:'Fiscalía',actuaciones:[{tipo:'Orientación jurídica',desc:'Se orientó al denunciante sobre rutas legales',fecha:Date.now()-86400000}]},
+    {id:'c3',radicado:'ALG-250103-C4M1',userId:'demo1',tipo:'Abandono',relato:'Gato abandonado en parque con heridas',fechaHechos:'2025-01-03',departamento:'Cundinamarca',ciudad:'Soacha',direccion:'Parque Central',responsables:'Desconocido',pruebas:'no',creado:Date.now()-86400000,estado:'Cerrado',prioridad:'Baja',validacion:{estado:'Validado - Completo',obs:'Resuelto',fecha:Date.now()-86400000/2},autoridad:'Alcaldía',actuaciones:[{tipo:'Acompañamiento',desc:'Se entregó animal a shelter',fecha:Date.now()-86400000/2}]}
+  ];
+  setStore(K_CASES, cases);
+}
+seedDemoCases();
+
+// --- LOAD DEPARTMENTS ---
+function loadDeptos(){
+  const opts='<option value="">Seleccionar...</option>'+Object.keys(DEPTOS).map(d=>`<option value="${d}">${d}</option>`).join('');
+  ['regDepto','denDepto'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=opts; });
+}
+loadDeptos();
+
+function cargarMunicipios(deptoId,ciudadId){
+  const depto=document.getElementById(deptoId).value;
+  const el=document.getElementById(ciudadId);
+  if(!depto||!DEPTOS[depto]){ el.innerHTML='<option value="">Seleccionar depto primero...</option>'; return; }
+  const munis=DEPTOS[depto].split(',');
+  el.innerHTML='<option value="">Seleccionar...</option>'+munis.map(m=>`<option value="${m}">${m}</option>`).join('');
+}
+
+// ═══ AUTH ═══
+function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  if(!email||!pass){ toast('⚠️ Completa todos los campos'); return; }
+
+  const users=getStore(K_USERS);
+  const user=users.find(u=>u.email.toLowerCase()===email.toLowerCase()&&u.password===pass);
+  if(!user){ toast('❌ Correo o contraseña incorrectos'); return; }
+
+  setStore(K_SESSION,{id:user.id,email:user.email,nombre:user.nombre,rol:user.rol,ts:Date.now()});
+  toast('✅ Bienvenido, '+user.nombre);
+  redirectByRole(user.rol);
+}
+
+function redirectByRole(rol){
+  if(rol==='denunciante'){ show('scr-denunciante'); renderMisDenuncias(); }
+  else if(rol==='gestor'){ show('scr-gestor'); renderGestorDashboard(); }
+  else if(rol==='admin'){ show('scr-admin'); renderAdminDashboard(); }
+}
+
+function doLogout(){
+  localStorage.removeItem(K_SESSION);
+  show('scr-home');
+  toast('👋 Sesión cerrada');
+}
+
+// --- REGISTER ---
+function registrarDenunciante(){
+  const n=document.getElementById('regNombre').value.trim();
+  const td=document.getElementById('regTipoDoc').value;
+  const doc=document.getElementById('regDoc').value.trim();
+  const cel=document.getElementById('regCelular').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const depto=document.getElementById('regDepto').value;
+  const ciudad=document.getElementById('regCiudad').value;
+  const pass=document.getElementById('regPass').value;
+
+  if(!n||!doc||!cel||!depto||!ciudad||!pass){ toast('⚠️ Completa los campos obligatorios'); return; }
+  if(pass.length<6){ toast('⚠️ La contraseña debe tener al menos 6 caracteres'); return; }
+
+  const users=getStore(K_USERS);
+  if(users.find(u=>u.email&&u.email.toLowerCase()===email.toLowerCase())){ toast('❌ Ya existe una cuenta con ese correo'); return; }
+
+  const newUser={id:genId(),nombre:n,tipoDoc:td,doc,celular:cel,email,departamento:depto,ciudad,rol:'denunciante',password:pass,creado:Date.now()};
+  users.push(newUser); setStore(K_USERS,users);
+  toast('✅ Registro exitoso. Ya puedes iniciar sesión.');
+  show('scr-login');
+}
+
+// ═══ RECOVER PASSWORD ═══
+function enviarCodigoRecuperacion(){
+  const email=document.getElementById('recoverEmail').value.trim();
+  if(!email){ toast('⚠️ Ingresa tu correo'); return; }
+
+  const users=getStore(K_USERS);
+  const idx=users.findIndex(u=>u.email&&u.email.toLowerCase()===email.toLowerCase());
+  if(idx===-1){ toast('❌ No existe una cuenta con ese correo'); return; }
+
+  const code=Math.random().toString(36).slice(2,8).toUpperCase();
+  users[idx].resetCode=code;
+  users[idx].resetExpiry=Date.now()+15*60*1000;
+  setStore(K_USERS,users);
+
+  // Send email via EmailJS
+  if(typeof emailjs!=='undefined'&&EMAILJS_PUBLIC_KEY!=='TU_PUBLIC_KEY'){
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: users[idx].email,
+      to_name: users[idx].nombre,
+      reset_code: code,
+      app_url: location.href
+    }).then(()=>{
+      toast('📧 Código enviado a '+email);
+      document.getElementById('recoverStep1').style.display='none';
+      document.getElementById('recoverStep2').style.display='block';
+    }).catch(err=>{
+      console.error(err);
+      toast('⚠️ Error al enviar correo. Código: '+code);
+      document.getElementById('recoverStep1').style.display='none';
+      document.getElementById('recoverStep2').style.display='block';
+    });
+  } else {
+    // EmailJS no configurado: mostrar código
+    toast('📧 Código generado: '+code);
+    alert('⚠️ EmailJS no está configurado.\nTu código de recuperación es: '+code+'\n\nConfigura TU_PUBLIC_KEY, TU_SERVICE_ID y TU_TEMPLATE_ID en el código.');
+    document.getElementById('recoverStep1').style.display='none';
+    document.getElementById('recoverStep2').style.display='block';
+  }
+}
+
+function cambiarContrasena(){
+  const email=document.getElementById('recoverEmail').value.trim();
+  const code=document.getElementById('recoverCode').value.trim().toUpperCase();
+  const newPass=document.getElementById('recoverNewPass').value;
+  const confirm=document.getElementById('recoverConfirm').value;
+
+  if(!code||!newPass||!confirm){ toast('⚠️ Completa todos los campos'); return; }
+  if(newPass.length<6){ toast('⚠️ La contraseña debe tener al menos 6 caracteres'); return; }
+  if(newPass!==confirm){ toast('⚠️ Las contraseñas no coinciden'); return; }
+
+  const users=getStore(K_USERS);
+  const idx=users.findIndex(u=>u.email&&u.email.toLowerCase()===email.toLowerCase());
+  if(idx===-1){ toast('❌ Error de usuario'); return; }
+
+  if(users[idx].resetCode!==code){ toast('❌ Código incorrecto'); return; }
+  if(Date.now()>users[idx].resetExpiry){ toast('❌ Código expirado. Solicita uno nuevo.'); return; }
+
+  users[idx].password=newPass;
+  delete users[idx].resetCode;
+  delete users[idx].resetExpiry;
+  setStore(K_USERS,users);
+  toast('✅ Contraseña actualizada. Ya puedes iniciar sesión.');
+  show('scr-login');
+  document.getElementById('recoverStep1').style.display='block';
+  document.getElementById('recoverStep2').style.display='none';
+}
+
+// ═══ PUBLIC RADICADO LOOKUP ═══
+function consultarPublico(){
+  const rad=document.getElementById('pubRadicado').value.trim();
+  if(!rad){ toast('⚠️ Ingresa un radicado'); return; }
+  const cases=getStore(K_CASES);
+  const c=cases.find(c=>c.radicado===rad);
+  const div=document.getElementById('pubResult');
+  if(!c){ div.innerHTML='<div class="card"><p style="color:var(--hi)">❌ No se encontró caso con ese radicado</p></div>'; return; }
+  div.innerHTML=`<div class="card">
+    <h3>📋 Caso: ${escHtml(c.radicado)}</h3>
+    <p><strong>Tipo:</strong> ${escHtml(c.tipo)}</p>
+    <p><strong>Estado:</strong> <span class="badge badge-g">${escHtml(c.estado)}</span></p>
+    ${c.prioridad?`<p><strong>Prioridad:</strong> <span class="badge ${c.prioridad==='Alta'?'badge-hi':c.prioridad==='Media'?'badge-med':'badge-lo'}">${c.prioridad}</span></p>`:''}
+    <p><strong>Departamento:</strong> ${escHtml(c.departamento)}</p>
+    <p><strong>Fecha registro:</strong> ${new Date(c.creado).toLocaleDateString('es-CO')}</p>
+  </div>`;
+}
+
+// ═══ DENUNCIANTE ═══
+function renderMisDenuncias(){
+  const ses=getSession(); if(!ses) return;
+  document.getElementById('denName').textContent=ses.nombre;
+  const cases=getStore(K_CASES).filter(c=>c.userId===ses.id);
+  const div=document.getElementById('misDenuncias');
+  if(!cases.length){ div.innerHTML='<div class="empty-state"><div class="icon">📭</div><p>No tienes denuncias registradas</p></div>'; return; }
+  div.innerHTML=cases.map(c=>`
+    <div class="card" style="margin-bottom:8px;padding:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+        <strong style="color:var(--g);font-size:0.85rem">${escHtml(c.radicado)}</strong>
+        <span class="badge badge-g">${escHtml(c.estado)}</span>
+      </div>
+      <p style="font-size:0.85rem;margin-top:6px"><strong>${escHtml(c.tipo)}</strong> · ${escHtml(c.departamento)}</p>
+      ${c.prioridad?`<span class="badge ${c.prioridad==='Alta'?'badge-hi':c.prioridad==='Media'?'badge-med':'badge-lo'}" style="margin-top:4px">${c.prioridad}</span>`:''}
+    </div>
+  `).join('');
+}
+
+function registrarDenuncia(){
+  const ses=getSession();
+  const tipo=document.getElementById('denTipo').value;
+  const relato=document.getElementById('denRelato').value.trim();
+  const fecha=document.getElementById('denFecha').value;
+  const depto=document.getElementById('denDepto').value;
+  const ciudad=document.getElementById('denCiudad').value;
+  const dir=document.getElementById('denDireccion').value.trim();
+  const resp=document.getElementById('denResponsables').value.trim();
+  const pruebas=document.getElementById('denPruebas').value;
+
+  if(!relato||!fecha||!depto||!ciudad){ toast('⚠️ Completa los campos obligatorios'); return; }
+
+  const newCase={
+    id:genId(), radicado:genRadicado(), userId:ses.id,
+    tipo, relato, fechaHechos:fecha, departamento:depto, ciudad:ciudad,
+    direccion:dir, responsables:resp, pruebas,
+    creado:Date.now(), estado:'Denuncia recibida', prioridad:'',
+    validacion:{}, autoridad:'', observaciones:'', actuaciones:[]
+  };
+
+  const cases=getStore(K_CASES);
+  cases.push(newCase); setStore(K_CASES,cases);
+  toast('✅ Denuncia registrada: '+newCase.radicado);
+  alert('📝 Tu número de radicado es:\n\n'+newCase.radicado+'\n\nGuárdalo para consultas futuras.');
+  show('scr-denunciante'); renderMisDenuncias();
+}
+
+// ═══ GESTOR ═══
+function renderGestorDashboard(){
+  const ses=getSession(); if(!ses) return;
+  document.getElementById('gestName').textContent=ses.nombre;
+  const cases=getStore(K_CASES);
+  const pend=cases.filter(c=>c.estado==='Denuncia recibida').length;
+  const gest=cases.filter(c=>c.estado==='En gestión jurídica').length;
+  const cerr=cases.filter(c=>c.estado==='Cerrado').length;
+  document.getElementById('gestStats').innerHTML=`
+    <div class="stat-card"><div class="num">${cases.length}</div><div class="label">Total denuncias</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--med)">${pend}</div><div class="label">Pendientes</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--g)">${gest}</div><div class="label">En gestión</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--lo)">${cerr}</div><div class="label">Cerrados</div></div>
+  `;
+  showGestorTab('pendientes');
+}
+
+let currentCaseId=null;
+
+function showGestorTab(tab){
+  const cases=getStore(K_CASES);
+  const div=document.getElementById('gestorContent');
+
+  if(tab==='pendientes'){
+    const pend=cases.filter(c=>c.estado==='Denuncia recibida');
+    if(!pend.length){ div.innerHTML='<div class="empty-state"><div class="icon">✅</div><p>No hay casos pendientes</p></div>'; return; }
+    div.innerHTML='<h3 style="margin-bottom:12px;color:var(--g)">📥 Pendientes de Validación</h3>'+pend.map(c=>`
+      <div class="card" style="padding:14px;margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+          <strong style="color:var(--g);font-size:0.85rem">${escHtml(c.radicado)}</strong>
+          <span class="badge badge-med">${escHtml(c.tipo)}</span>
+        </div>
+        <p style="font-size:0.8rem;color:var(--mut);margin-top:4px">${escHtml(c.departamento)} · ${escHtml(c.ciudad)} · ${new Date(c.creado).toLocaleDateString('es-CO')}</p>
+        <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="abrirValidacion('${c.id}')">⚖️ Validar</button>
+      </div>
+    `).join('');
+  } else if(tab==='activos'){
+    const activos=cases.filter(c=>c.estado==='En gestión jurídica'||c.estado==='En seguimiento'||c.estado==='Remitido a autoridad');
+    if(!activos.length){ div.innerHTML='<div class="empty-state"><div class="icon">📂</div><p>No hay casos activos</p></div>'; return; }
+    div.innerHTML='<h3 style="margin-bottom:12px;color:var(--g)">📂 Casos Activos</h3>'+activos.map(c=>`
+      <div class="card" style="padding:14px;margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+          <strong style="color:var(--g);font-size:0.85rem">${escHtml(c.radicado)}</strong>
+          <span class="badge badge-g">${escHtml(c.estado)}</span>
+        </div>
+        <p style="font-size:0.8rem;color:var(--mut);margin-top:4px">${escHtml(c.tipo)} · ${escHtml(c.departamento)}</p>
+        ${c.prioridad?`<span class="badge ${c.prioridad==='Alta'?'badge-hi':c.prioridad==='Media'?'badge-med':'badge-lo'}">${c.prioridad}</span>`:''}
+        <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="abrirSeguimiento('${c.id}')">📂 Ver Expediente</button>
+        ${c.estado==='En gestión jurídica'&&!c.actuaciones.length?`<button class="btn btn-secondary btn-sm" style="margin-top:4px" onclick="abrirClasificacion('${c.id}')">🏷️ Clasificar</button>`:''}
+      </div>
+    `).join('');
+  }
+}
+
+function abrirValidacion(id){
+  currentCaseId=id;
+  const c=getStore(K_CASES).find(x=>x.id===id);
+  document.getElementById('validarDetalles').innerHTML=`
+    <div class="card">
+      <p><strong>Radicado:</strong> ${escHtml(c.radicado)}</p>
+      <p><strong>Tipo:</strong> ${escHtml(c.tipo)}</p>
+      <p><strong>Relato:</strong> ${escHtml(c.relato)}</p>
+      <p><strong>Ubicación:</strong> ${escHtml(c.departamento)}, ${escHtml(c.ciudad)}</p>
+      ${c.direccion?`<p><strong>Dirección:</strong> ${escHtml(c.direccion)}</p>`:''}
+      ${c.responsables?`<p><strong>Responsables:</strong> ${escHtml(c.responsables)}</p>`:''}
+    </div>
+  `;
+  show('scr-validar');
+}
+
+function guardarValidacion(){
+  const estado=document.getElementById('valEstado').value;
+  const obs=document.getElementById('valObs').value.trim();
+  const cases=getStore(K_CASES);
+  const c=cases.find(x=>x.id===currentCaseId);
+  c.validacion={estado,obs,fecha:Date.now()};
+  if(estado==='Validado - Completo') c.estado='Validado - Completo';
+  else if(estado==='Requiere información') c.estado='Requiere información';
+  else c.estado='No competente';
+  setStore(K_CASES,cases);
+  toast('✅ Validación guardada');
+  show('scr-gestor'); renderGestorDashboard();
+}
+
+function abrirClasificacion(id){
+  currentCaseId=id;
+  const c=getStore(K_CASES).find(x=>x.id===id);
+  document.getElementById('clasificarDetalles').innerHTML=`<div class="card"><p><strong>${escHtml(c.radicado)}</strong> · ${escHtml(c.tipo)}</p></div>`;
+  show('scr-clasificar');
+}
+
+function guardarClasificacion(){
+  const prioridad=document.getElementById('clasPrioridad').value;
+  const autoridad=document.getElementById('clasAutoridad').value;
+  const obs=document.getElementById('clasObs').value.trim();
+  const cases=getStore(K_CASES);
+  const c=cases.find(x=>x.id===currentCaseId);
+  c.prioridad=prioridad; c.autoridad=autoridad; c.observaciones=obs; c.estado='En gestión jurídica';
+  setStore(K_CASES,cases);
+  toast('✅ Caso clasificado');
+  show('scr-gestor'); renderGestorDashboard();
+}
+
+function abrirSeguimiento(id){
+  currentCaseId=id;
+  const c=getStore(K_CASES).find(x=>x.id===id);
+  let html=`
+    <div class="card">
+      <p><strong>Radicado:</strong> ${escHtml(c.radicado)}</p>
+      <p><strong>Estado:</strong> <span class="badge badge-g">${escHtml(c.estado)}</span></p>
+      <p><strong>Prioridad:</strong> ${c.prioridad?`<span class="badge ${c.prioridad==='Alta'?'badge-hi':c.prioridad==='Media'?'badge-med':'badge-lo'}">${c.prioridad}</span>`:'-'}</p>
+      <p><strong>Autoridad:</strong> ${c.autoridad||'-'}</p>
+      <p><strong>Tipo:</strong> ${escHtml(c.tipo)}</p>
+      <p><strong>Ubicación:</strong> ${escHtml(c.departamento)}, ${escHtml(c.ciudad)}</p>
+      <p><strong>Relato:</strong> ${escHtml(c.relato)}</p>
+    </div>
+  `;
+  if(c.actuaciones&&c.actuaciones.length){
+    html+='<h3 style="margin:16px 0 12px;color:var(--g)">📜 Historial de Actuaciones</h3><div class="timeline">';
+    c.actuaciones.forEach(a=>{
+      html+=`<div class="timeline-item"><div class="date">${new Date(a.fecha).toLocaleString('es-CO')}</div><div class="text"><strong>${escHtml(a.tipo)}</strong>: ${escHtml(a.desc)}</div></div>`;
+    });
+    html+='</div>';
+  }
+  document.getElementById('segDetalles').innerHTML=html;
+  show('scr-seguimiento');
+}
+
+function registrarActuacion(){
+  const tipo=document.getElementById('actTipo').value;
+  const desc=document.getElementById('actDesc').value.trim();
+  const nuevoEstado=document.getElementById('actEstado').value;
+  if(!desc){ toast('⚠️ Describe la actuación'); return; }
+
+  const cases=getStore(K_CASES);
+  const c=cases.find(x=>x.id===currentCaseId);
+  c.actuaciones.push({tipo,desc,fecha:Date.now()});
+  if(nuevoEstado) c.estado=nuevoEstado;
+  setStore(K_CASES,cases);
+  toast('✅ Actuación registrada');
+  document.getElementById('actDesc').value='';
+  document.getElementById('actEstado').value='';
+  abrirSeguimiento(currentCaseId);
+}
+
+// ═══ ADMIN ═══
+function renderAdminDashboard(){
+  const ses=getSession(); if(!ses) return;
+  document.getElementById('admName').textContent=ses.nombre;
+  const users=getStore(K_USERS);
+  const cases=getStore(K_CASES);
+  const depts=[...new Set(cases.map(c=>c.departamento))].length;
+  const cerr=cases.filter(c=>c.estado==='Cerrado').length;
+  document.getElementById('admStats').innerHTML=`
+    <div class="stat-card"><div class="num">${users.length}</div><div class="label">Usuarios</div></div>
+    <div class="stat-card"><div class="num">${cases.length}</div><div class="label">Denuncias</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--lo)">${cerr}</div><div class="label">Cerrados</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--g)">${depts}</div><div class="label">Depts activos</div></div>
+  `;
+}
+
+function showAdminTab(tab){
+  const div=document.getElementById('adminContent');
+  const cases=getStore(K_CASES);
+  const users=getStore(K_USERS);
+
+  if(tab==='reportes'){
+    div.innerHTML=`
+      <div class="card"><h3>📊 Denuncias por Tipo</h3><canvas id="chartTipo" height="200"></canvas></div>
+      <div class="card"><h3>📊 Por Departamento</h3><canvas id="chartDepto" height="200"></canvas></div>
+      <div class="card"><h3>📊 Por Estado</h3><canvas id="chartEstado" height="200"></canvas></div>
+      <div class="card"><h3>📊 Por Prioridad</h3><canvas id="chartPrioridad" height="200"></canvas></div>
+    `;
+    setTimeout(()=>renderCharts(cases),100);
+  } else if(tab==='usuarios'){
+    div.innerHTML=`<div class="card"><h3>👥 Usuarios Registrados</h3><div class="table-wrap"><table>
+      <tr><th>Nombre</th><th>Correo</th><th>Rol</th></tr>
+      ${users.map(u=>`<tr><td>${escHtml(u.nombre)}</td><td>${escHtml(u.email||'-')}</td><td><span class="badge badge-g">${u.rol}</span></td></tr>`).join('')}
+    </table></div></div>`;
+  } else if(tab==='todas'){
+    let filterHtml=`
+      <div class="card" style="padding:14px;margin-bottom:12px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <select id="admFilterEstado" onchange="filtrarAdmin()" style="flex:1;padding:10px;border:2px solid #e0ede8;border-radius:10px;font-size:0.85rem">
+            <option value="">Todos los estados</option>
+            <option>Denuncia recibida</option><option>Validado - Completo</option><option>En gestión jurídica</option><option>Cerrado</option>
+          </select>
+        </div>
+      </div>
+    `;
+    div.innerHTML=filterHtml+`<div class="table-wrap"><table>
+      <tr><th>Radicado</th><th>Tipo</th><th>Depto</th><th>Estado</th><th>Prioridad</th></tr>
+      ${cases.map(c=>`<tr>
+        <td style="font-weight:600;color:var(--g)">${escHtml(c.radicado)}</td>
+        <td>${escHtml(c.tipo)}</td>
+        <td>${escHtml(c.departamento)}</td>
+        <td><span class="badge badge-g">${escHtml(c.estado)}</span></td>
+        <td>${c.prioridad?`<span class="badge ${c.prioridad==='Alta'?'badge-hi':c.prioridad==='Media'?'badge-med':'badge-lo'}">${c.prioridad}</span>`:'-'}</td>
+      </tr>`).join('')}
+    </table></div>`;
+  }
+}
+
+function filtrarAdmin(){
+  const filtro=document.getElementById('admFilterEstado').value;
+  const cases=getStore(K_CASES).filter(c=>!filtro||c.estado===filtro);
+  const table=document.querySelector('#adminContent table');
+  if(!table) return;
+  const tbody=document.querySelector('#adminContent table tbody')||document.querySelector('#adminContent table');
+  const rows=table.querySelectorAll('tr');
+  rows.forEach((r,i)=>{if(i===0)return; r.style.display='';}); // Reset
+  // Re-render with filter
+  showAdminTab('todas');
+}
+
+function renderCharts(cases){
+  // By type
+  const tipos={}; cases.forEach(c=>{tipos[c.tipo]=(tipos[c.tipo]||0)+1});
+  new Chart(document.getElementById('chartTipo'),{type:'bar',data:{labels:Object.keys(tipos),datasets:[{data:Object.values(tipos),backgroundColor:'rgba(30,122,110,0.7)'}]},options:{responsive:true,plugins:{legend:{display:false}}}});
+
+  // By dept
+  const deptos={}; cases.forEach(c=>{deptos[c.departamento]=(deptos[c.departamento]||0)+1});
+  const topDeptos=Object.entries(deptos).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  new Chart(document.getElementById('chartDepto'),{type:'bar',data:{labels:topDeptos.map(d=>d[0]),datasets:[{data:topDeptos.map(d=>d[1]),backgroundColor:'rgba(40,163,148,0.7)'}]},options:{responsive:true,plugins:{legend:{display:false}}}});
+
+  // By state
+  const estados={}; cases.forEach(c=>{estados[c.estado]=(estados[c.estado]||0)+1});
+  new Chart(document.getElementById('chartEstado'),{type:'pie',data:{labels:Object.keys(estados),datasets:[{data:Object.values(estados),backgroundColor:['#f39c12','#27ae60','#1e7a6e','#e74c3c','#3498db','#9b59b6']}]},options:{responsive:true}});
+
+  // By priority
+  const pris={}; cases.forEach(c=>{if(c.prioridad)pris[c.prioridad]=(pris[c.prioridad]||0)+1});
+  new Chart(document.getElementById('chartPrioridad'),{type:'doughnut',data:{labels:Object.keys(pris),datasets:[{data:Object.values(pris),backgroundColor:['#e74c3c','#f39c12','#27ae60']}]},options:{responsive:true}});
+}
+
+// ═══ BOTTOM NAV ═══
+function navTo(target){
+  const ses=getSession();
+  if(!ses){show('scr-home');return;}
+  if(target==='home'){redirectByRole(ses.rol);}
+  else if(target==='mis-casos'){
+    if(ses.rol==='denunciante'){show('scr-denunciante');renderMisDenuncias();}
+    else if(ses.rol==='gestor'){show('scr-gestor');renderGestorDashboard();}
+    else{show('scr-admin');renderAdminDashboard();}
+  }
+  else if(target==='nueva'){
+    if(ses.rol==='denunciante') show('scr-nueva-denuncia');
+    else toast('⚠️ Solo los denunciantes pueden crear denuncias');
+  }
+  else if(target==='perfil'){
+    toast('👤 '+ses.nombre+' ('+ses.rol+') · Cerrar: '+ses.email);
+  }
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelector(`.nav-item[data-scr="${target}"]`)?.classList.add('active');
+}
+
+// ═══ CHECK SESSION ON LOAD ═══
+(function(){
+  const ses=getSession();
+  if(ses){
+    document.getElementById('bottomNav').style.display='flex';
+    // Auto-redirect after splash
+    setTimeout(()=>{redirectByRole(ses.rol);},2100);
+  }
+})();
+
+// Show bottom nav when logged in
+const obs=new MutationObserver(()=>{
+  const ses=getSession();
+  document.getElementById('bottomNav').style.display=ses?'flex':'none';
+});
+</script>
+</body>
+</html>
